@@ -32,5 +32,11 @@ public class ServerImpl implements Server {
 		}
 		
 	}
+	public static void main(String [] args) throws IOException {
+		int portNumber = 2000;
+	    
+		ServerImpl newServer = new ServerImpl(portNumber);
+	    newServer.listenForClients();
+	}
 
 }
