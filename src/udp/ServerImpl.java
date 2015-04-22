@@ -25,6 +25,8 @@ public class ServerImpl implements Server {
 				newClient = newServerSocket.accept();
 				//get unique Id goes here.
 				System.out.println("Client UniqueID HERE has connected");
+				Thread thread = new Thread(new ServerClientHandlerImpl(newClient));
+		        thread.start();
 			}
 			
 		} catch (IOException ex){
