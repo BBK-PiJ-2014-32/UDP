@@ -8,5 +8,5 @@ package udp;
  */
 public interface Client {
 
-	void connect();
+	void connectToServerViaTCP();
 }
