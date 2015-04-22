@@ -1,5 +1,9 @@
 package udp;
 
+import java.io.IOException;
+import java.net.Socket;
+import java.net.UnknownHostException;
+
 public class ClientImpl implements Client{
 
 	private String hostName;
@@ -11,8 +15,16 @@ public class ClientImpl implements Client{
 	}
 	
 	@Override
-	public void connect() {
-		// TODO Auto-generated method stub
+	public void connectToServerViaTCP() {
+		try{
+			System.out.println("Trying to connect");
+			Socket client = new Socket(hostName, port);
+			System.out.println("Connected to host: " + hostName + "at port: " + port);
+		} catch (UnknownHostException ex){
+			ex.printStackTrace();
+		} catch (IOException ex){
+			ex.printStackTrace();
+		}
 		
 	}
 
