@@ -24,7 +24,7 @@ public class ServerImpl implements Server {
 				System.out.println("Server listening for clients");
 				newClient = newServerSocket.accept();
 				//get unique Id goes here.
-				
+				System.out.println("Client UniqueID HERE has connected");
 			}
 			
 		} catch (IOException ex){
