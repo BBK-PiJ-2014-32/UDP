@@ -1,5 +1,7 @@
 package udp;
 
+import java.io.IOException;
+
 /**
  * The ServerClientHandler sends the client the unique Id and then indicates if that client is a sender or 
  * receiver process. Then listens for UDP connection, then tells the client to connect over UDP and then
@@ -7,6 +9,6 @@ package udp;
  */
 public interface ServerClientHandler {
 
-	int sendUniqueId();
+	void sendUniqueId() throws IOException, InterruptedException;
 	
 }
