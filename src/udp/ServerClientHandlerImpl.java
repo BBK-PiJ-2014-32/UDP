@@ -16,7 +16,14 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 	
 	@Override
 	public void run() {
-	
+		try {
+			System.out.println("ServerClientHandler started");
+			sendUniqueId();
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		} catch (InterruptedException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
