@@ -1,10 +1,13 @@
 package udp;
 
+import java.io.IOException;
 import java.net.ServerSocket;
+import java.net.Socket;
 
 public class ServerImpl implements Server {
 	
-	private ServerSocket serverSocket;
+	private ServerSocket newServerSocket;
+	private Socket newClient;
 	private int port;
 
 	public ServerImpl(int port){
@@ -13,7 +16,20 @@ public class ServerImpl implements Server {
 	
 	@Override
 	public void listenForClients() {
-		// TODO Auto-generated method stub
+		try {
+			newServerSocket = new ServerSocket(port);
+			newClient = null;
+			
+			while(true){
+				System.out.println("Server listening for clients");
+				newClient = newServerSocket.accept();
+				//get unique Id goes here.
+				
+			}
+			
+		} catch (IOException ex){
+			ex.printStackTrace();
+		}
 		
 	}
 
