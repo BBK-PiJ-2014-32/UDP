@@ -4,6 +4,9 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -24,6 +27,11 @@ public class ClientImpl implements Client{
 		connectToServerViaTCP();
 		requestUniqueId(client);
 		isFirstToConnect();
+			if(process.equals("sender")){
+				sendViaUDP();
+			} else {
+				receiveViaUDP();
+			}
 	}
 	
 	@Override
@@ -80,13 +88,20 @@ public class ClientImpl implements Client{
 
 	@Override
 	public void sendViaUDP() {
-		// TODO Auto-generated method stub
-		
+		try {
+			DatagramSocket newUDPSocket = new DatagramSocket();
+			InetAddress IPAddress = InetAddress.getByName("localhost");
+			byte[] dataToSend = process.getBytes();
+			DatagramPacket packetToSend = new DatagramPacket(dataToSend, dataToSend.length, IPAddress, 2000);
+			newUDPSocket.send(packetToSend);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
 	public void receiveViaUDP() {
-		// TODO Auto-generated method stub
+		System.out.println("Being called");
 		
 	}
 
