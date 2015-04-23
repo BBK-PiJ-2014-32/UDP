@@ -25,6 +25,7 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 		try {
 			System.out.println("ServerClientHandler started");
 			sendUniqueId();
+			notifyClientIfFirst();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} catch (InterruptedException ex) {
@@ -43,8 +44,24 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 			toClient.writeBytes(clientId.toString() + '\n');
 			System.out.println("Client id: " + clientId + " sent.");
 		} else {
-			System.out.println("false");
+			System.out.println("Invalid request.");
 		}
+	}
+	
+	@Override
+	public void notifyClientIfFirst() throws IOException {
+		BufferedReader fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+        DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
+		String inText = fromClient.readLine();
+		System.out.println("Request Received: " + inText);
+		if(inText.equals("first to connect?") && clientId.equals(1)){
+			System.out.println("Yes");
+			toClient.writeBytes("Yes" + '\n');
+		} else {
+			System.out.println("No");
+			toClient.writeBytes("No" + '\n');
+		}
+		
 	}
 
 	@Override
@@ -60,5 +77,7 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 			ex.printStackTrace();
 		}
 	}
+
+	
 	
 }

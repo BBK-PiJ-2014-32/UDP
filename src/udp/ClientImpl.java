@@ -22,6 +22,7 @@ public class ClientImpl implements Client{
 	public void run(){
 		connectToServerViaTCP();
 		requestUniqueId(client);
+		isFirstToConnect();
 	}
 	
 	@Override
@@ -63,10 +64,12 @@ public class ClientImpl implements Client{
 			String firstRequest = "first to connect?";
 			toServer.writeBytes(firstRequest + '\n');
 			String receivedText = fromServer.readLine();
-			System.out.println("Unique Id: " + receivedText + " received");
+			System.out.println("First to connect? " + receivedText);
 				if(receivedText.equals("Yes")){
+					System.out.println("First to connect");
 					return true;
 				} else {
+					System.out.println("Not first to connect");
 					return false;	
 				}	
 		} catch (IOException ex) {
