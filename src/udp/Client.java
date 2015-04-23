@@ -1,5 +1,7 @@
 package udp;
 
+import java.net.Socket;
+
 /**
  * The Client will connect to the server via TCP and while doing so will request a uniqueId.
  * Once it has received this Id it will then ask if it is the first to connect, if it is it
@@ -10,5 +12,5 @@ public interface Client {
 
 	void connectToServerViaTCP();
 	
-	void requestUniqueId();
+	void requestUniqueId(Socket client);
 }
