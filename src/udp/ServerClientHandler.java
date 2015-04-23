@@ -11,6 +11,10 @@ public interface ServerClientHandler {
 
 	void sendUniqueId() throws IOException, InterruptedException;
 	
+	void notifyClientIfFirst() throws IOException;
+	
 	void listenForUDP();
+	
+	
 	
 }
