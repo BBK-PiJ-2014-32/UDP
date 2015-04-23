@@ -9,4 +9,6 @@ package udp;
 public interface Client {
 
 	void connectToServerViaTCP();
+	
+	void requestUniqueId();
 }
