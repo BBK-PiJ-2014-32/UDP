@@ -30,6 +30,7 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 	public void sendUniqueId() throws IOException, InterruptedException {
 		BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
 		clientId++;
+		System.out.println(clientId);
 		writer.write(clientId);
 		writer.flush();
 		writer.close();
