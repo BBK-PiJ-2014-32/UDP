@@ -12,7 +12,7 @@ public class ClientImpl implements Client{
 	private String hostName;
 	private Socket client;
 	private int port;
-	private int uniqueId;
+	private Integer uniqueId;
 	
 	public ClientImpl(String host, int port){
 		this.hostName = host;
@@ -47,10 +47,20 @@ public class ClientImpl implements Client{
 			String idRequest = "send id";
 			toServer.writeBytes(idRequest + '\n');
 			String receivedId = fromServer.readLine();
+			uniqueId = Integer.parseInt(receivedId);
 			System.out.println("Unique Id: " + receivedId + " received");
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
+	}
+
+	@Override
+	public boolean isFirstToConnect() {
+		if(uniqueId.equals(1)){
+			return true;
+		} else {
+			return false;	
+		}	
 	}
 
 
