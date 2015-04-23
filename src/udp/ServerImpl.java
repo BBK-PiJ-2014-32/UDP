@@ -23,8 +23,7 @@ public class ServerImpl implements Server {
 			while(true){
 				System.out.println("Server listening for clients");
 				newSocket = newServerSocket.accept();
-				//get unique Id goes here.
-				System.out.println("Client UniqueID HERE has connected");
+				System.out.println("Client has connected");
 				Thread thread = new Thread(new ServerClientHandlerImpl(newSocket));
 		        thread.start();
 			}

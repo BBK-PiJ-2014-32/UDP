@@ -13,4 +13,5 @@ public interface Client {
 	void connectToServerViaTCP();
 	
 	void requestUniqueId(Socket client);
+	
 }

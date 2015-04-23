@@ -24,6 +24,7 @@ public class ClientImpl implements Client{
 			System.out.println("Trying to connect");
 			Socket client = new Socket(hostName, port);
 			System.out.println("Connected to host: " + hostName + "at port: " + port);
+			requestUniqueId(client);
 		} catch (UnknownHostException ex){
 			ex.printStackTrace();
 		} catch (IOException ex){
@@ -37,12 +38,15 @@ public class ClientImpl implements Client{
 		try {
 			DataOutputStream toServer = new DataOutputStream(client.getOutputStream());
 			BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			System.out.println("Requesting unique id");
 			String idRequest = "send id";
 			toServer.writeBytes(idRequest + '\n');
-			uniqueId = Integer.parseInt(fromServer.readLine());
+			String receivedId = fromServer.readLine();
+			System.out.println("Unique Id: " + receivedId + " received");
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 	}
+
 
 }
