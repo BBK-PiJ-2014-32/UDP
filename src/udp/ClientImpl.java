@@ -101,7 +101,15 @@ public class ClientImpl implements Client{
 
 	@Override
 	public void receiveViaUDP() {
-		System.out.println("Being called");
+		try {
+			DatagramSocket newUDPSocket = new DatagramSocket();
+			InetAddress IPAddress = InetAddress.getByName("localHost");
+			byte[] dataToSend = process.getBytes();
+			DatagramPacket packetToSend = new DatagramPacket(dataToSend, dataToSend.length, IPAddress, 2000);
+			newUDPSocket.send(packetToSend);
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 		
 	}
 
