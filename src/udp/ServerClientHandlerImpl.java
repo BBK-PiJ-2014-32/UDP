@@ -68,7 +68,7 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 	@Override
 	public void listenForUDP() {
 		try{
-			dataSocket = new DatagramSocket(socket.getPort());
+			dataSocket = new DatagramSocket(2000);
 			byte[] receiveData = new byte[1024];
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
             System.out.println("Waiting for UDP connection");
