@@ -26,6 +26,7 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 			System.out.println("ServerClientHandler started");
 			sendUniqueId();
 			notifyClientIfFirst();
+			listenForUDP();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} catch (InterruptedException ex) {
@@ -70,6 +71,7 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 			dataSocket = new DatagramSocket(socket.getPort());
 			byte[] receiveData = new byte[1024];
             DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+            System.out.println("Waiting for UDP connection");
             dataSocket.receive(receivePacket);
             String receivedText = new String(receivePacket.getData());
             System.out.println("Connected to: " + receivedText);
