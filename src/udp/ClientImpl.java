@@ -90,7 +90,7 @@ public class ClientImpl implements Client{
 	public void sendViaUDP() {
 		try {
 			DatagramSocket newUDPSocket = new DatagramSocket();
-			InetAddress IPAddress = InetAddress.getByName("localhost");
+			InetAddress IPAddress = InetAddress.getByName("localHost");
 			byte[] dataToSend = process.getBytes();
 			DatagramPacket packetToSend = new DatagramPacket(dataToSend, dataToSend.length, IPAddress, 2000);
 			newUDPSocket.send(packetToSend);
