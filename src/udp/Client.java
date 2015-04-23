@@ -15,4 +15,6 @@ public interface Client {
 	void requestUniqueId(Socket client);
 	
 	boolean isFirstToConnect();
+	
+	void connectViaUDP();
 }
