@@ -7,7 +7,7 @@ import java.net.Socket;
 public class ServerImpl implements Server {
 	
 	private ServerSocket newServerSocket;
-	private Socket newClient;
+	private Socket newSocket;
 	private int port;
 
 	public ServerImpl(int port){
@@ -18,14 +18,14 @@ public class ServerImpl implements Server {
 	public void listenForClients() {
 		try {
 			newServerSocket = new ServerSocket(port);
-			newClient = null;
+			newSocket = null;
 			
 			while(true){
 				System.out.println("Server listening for clients");
-				newClient = newServerSocket.accept();
+				newSocket = newServerSocket.accept();
 				//get unique Id goes here.
 				System.out.println("Client UniqueID HERE has connected");
-				Thread thread = new Thread(new ServerClientHandlerImpl(newClient));
+				Thread thread = new Thread(new ServerClientHandlerImpl(newSocket));
 		        thread.start();
 			}
 			
