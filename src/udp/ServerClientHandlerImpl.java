@@ -6,12 +6,15 @@ import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
 import java.net.Socket;
 
 public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 
 	private static Integer clientId = 0;
 	private Socket socket;
+	private DatagramSocket dataSocket;
 	
 	public ServerClientHandlerImpl(Socket socket){
 		this.socket = socket;
@@ -46,8 +49,16 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 
 	@Override
 	public void listenForUDP() {
-		// TODO Auto-generated method stub
-		
+		try{
+			dataSocket = new DatagramSocket(socket.getPort());
+			byte[] receiveData = new byte[1024];
+            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
+            dataSocket.receive(receivePacket);
+            String receivedText = new String(receivePacket.getData());
+            System.out.println("Connected to: " + receivedText);
+		} catch (IOException ex){
+			ex.printStackTrace();
+		}
 	}
 	
 }
