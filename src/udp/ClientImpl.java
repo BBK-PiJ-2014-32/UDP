@@ -1,6 +1,9 @@
 package udp;
 
+import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.Socket;
 import java.net.UnknownHostException;
 
@@ -8,6 +11,7 @@ public class ClientImpl implements Client{
 
 	private String hostName;
 	private int port;
+	private int uniqueId;
 	
 	public ClientImpl(String host, int port){
 		this.hostName = host;
@@ -26,6 +30,19 @@ public class ClientImpl implements Client{
 			ex.printStackTrace();
 		}
 		
+	}
+
+	@Override
+	public void requestUniqueId(Socket client) {
+		try {
+			DataOutputStream toServer = new DataOutputStream(client.getOutputStream());
+			BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			String idRequest = "send id";
+			toServer.writeBytes(idRequest + '\n');
+			uniqueId = Integer.parseInt(fromServer.readLine());
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
 	}
 
 }
