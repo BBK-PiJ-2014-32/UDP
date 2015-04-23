@@ -13,6 +13,7 @@ public class ClientImpl implements Client{
 	private Socket client;
 	private int port;
 	private Integer uniqueId;
+	private String process;
 	
 	public ClientImpl(String host, int port){
 		this.hostName = host;
@@ -56,7 +57,7 @@ public class ClientImpl implements Client{
 	}
 
 	@Override
-	public boolean isFirstToConnect() {
+	public void isFirstToConnect() {
 		try {
 			DataOutputStream toServer = new DataOutputStream(client.getOutputStream());
 			BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
@@ -67,15 +68,14 @@ public class ClientImpl implements Client{
 			System.out.println("First to connect? " + receivedText);
 				if(receivedText.equals("Yes")){
 					System.out.println("First to connect");
-					return true;
+					process = "sender";
 				} else {
 					System.out.println("Not first to connect");
-					return false;	
+					process = "receiver";	
 				}	
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-	return false;
 	}
 
 	@Override
