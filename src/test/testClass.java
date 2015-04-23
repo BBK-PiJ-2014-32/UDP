@@ -11,7 +11,8 @@ public class testClass {
 
 	public void run(){
 		ClientImpl client = new ClientImpl("localHost", 2000);
-		client.connectToServerViaTCP();
+		client.run();
+	
 	}
 
 }

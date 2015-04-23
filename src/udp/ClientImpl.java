@@ -10,6 +10,7 @@ import java.net.UnknownHostException;
 public class ClientImpl implements Client{
 
 	private String hostName;
+	private Socket client;
 	private int port;
 	private int uniqueId;
 	
@@ -18,13 +19,17 @@ public class ClientImpl implements Client{
 		this.port = port;
 	}
 	
+	public void run(){
+		connectToServerViaTCP();
+		requestUniqueId(client);
+	}
+	
 	@Override
 	public void connectToServerViaTCP() {
 		try{
 			System.out.println("Trying to connect");
-			Socket client = new Socket(hostName, port);
+			client = new Socket(hostName, port);
 			System.out.println("Connected to host: " + hostName + "at port: " + port);
-			requestUniqueId(client);
 		} catch (UnknownHostException ex){
 			ex.printStackTrace();
 		} catch (IOException ex){
