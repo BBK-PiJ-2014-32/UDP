@@ -50,7 +50,7 @@ public class ClientImpl implements Client{
 			toServer.writeBytes(idRequest + '\n');
 			String receivedId = fromServer.readLine();
 			uniqueId = Integer.parseInt(receivedId);
-			System.out.println("Unique Id: " + receivedId + " received");
+			System.out.println("Unique Id: " + uniqueId + " received");
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -79,10 +79,18 @@ public class ClientImpl implements Client{
 	}
 
 	@Override
-	public void connectViaUDP() {
+	public void sendViaUDP() {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void receiveViaUDP() {
+		// TODO Auto-generated method stub
+		
+	}
+
+
 
 
 }
