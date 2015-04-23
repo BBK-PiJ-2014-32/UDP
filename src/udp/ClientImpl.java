@@ -56,11 +56,29 @@ public class ClientImpl implements Client{
 
 	@Override
 	public boolean isFirstToConnect() {
-		if(uniqueId.equals(1)){
-			return true;
-		} else {
-			return false;	
-		}	
+		try {
+			DataOutputStream toServer = new DataOutputStream(client.getOutputStream());
+			BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			System.out.println("Am I the first to connect");
+			String firstRequest = "first to connect?";
+			toServer.writeBytes(firstRequest + '\n');
+			String receivedText = fromServer.readLine();
+			System.out.println("Unique Id: " + receivedText + " received");
+				if(receivedText.equals("Yes")){
+					return true;
+				} else {
+					return false;	
+				}	
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+	return false;
+	}
+
+	@Override
+	public void connectViaUDP() {
+		// TODO Auto-generated method stub
+		
 	}
 
 
