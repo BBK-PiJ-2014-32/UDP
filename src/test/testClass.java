@@ -10,8 +10,10 @@ public class testClass {
 	}
 
 	public void run(){
-		ClientImpl client = new ClientImpl("localHost", 2000);
-		client.run();
+		ClientImpl client1 = new ClientImpl("localHost", 3000);
+		client1.run();
+		ClientImpl client2 = new ClientImpl("localHost", 3000);
+		client2.run();
 	
 	}
 
