@@ -15,6 +15,6 @@ public interface ServerClientHandler {
 	
 	void listenForUDP();
 	
-	
+	void tellClientToConnectOnUDP();
 	
 }
