@@ -28,6 +28,8 @@ public class ClientImpl implements Client{
 	private FileInputStream fileStream;
 	private BufferedInputStream bufferedStream;
 	private File fileToSend;
+	private DataOutputStream toServer;
+	private BufferedReader fromServer;
 	
 	
 	public ClientImpl(String host, int port){
@@ -39,10 +41,12 @@ public class ClientImpl implements Client{
 		connectToServerViaTCP();
 		requestUniqueId(client);
 		isFirstToConnect();
+		System.out.println("client is a: " + process);
 		recieveInstructionForUDP();
 			if(process.equals("sender")){
 				sendViaUDP();
 			} else {
+				System.out.println("Connecting to receive via UDP");
 				receiveViaUDP();
 			}
 	}
@@ -64,11 +68,12 @@ public class ClientImpl implements Client{
 	@Override
 	public void requestUniqueId(Socket client) {
 		try {
-			DataOutputStream toServer = new DataOutputStream(client.getOutputStream());
-			BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			toServer = new DataOutputStream(client.getOutputStream());
+			fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			System.out.println("REQUESTING UNIQUE ID");
 			String idRequest = "send id";
 			toServer.writeBytes(idRequest + '\n');
+			toServer.flush();
 			String receivedId = fromServer.readLine();
 			uniqueId = Integer.parseInt(receivedId);
 			System.out.println("UNIQUE ID: " + uniqueId + " RECIEVED");
@@ -80,11 +85,12 @@ public class ClientImpl implements Client{
 	@Override
 	public void isFirstToConnect() {
 		try {
-			DataOutputStream toServer = new DataOutputStream(client.getOutputStream());
-			BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			//DataOutputStream toServer = new DataOutputStream(client.getOutputStream());
+			//BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			System.out.println("Am I the first to connect");
 			String firstRequest = "first to connect?";
 			toServer.writeBytes(firstRequest + '\n');
+			toServer.flush();
 			String receivedText = fromServer.readLine();
 			System.out.println("First to connect? " + receivedText);
 				if(receivedText.equals("Yes")){
@@ -102,20 +108,29 @@ public class ClientImpl implements Client{
 	@Override
 	public void recieveInstructionForUDP() {
 		try {
-			DataOutputStream toServer = new DataOutputStream(client.getOutputStream());
-			BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			//BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			String instruction = fromServer.readLine();
 			System.out.println(instruction);
 				if (instruction.equals("CONNECT OVER UDP.")){
 					System.out.println("INSTRUCTION RECEIVED: " + instruction);
-					toServer.writeBytes(process + '\n');
 					UDPSocket = new DatagramSocket();
-					//connect over UDP method called here.
+					//sendProcessType();
 				}
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 		
+	}
+	
+	@Override
+	public void sendProcessType(){
+		try {
+			//DataOutputStream toServer = new DataOutputStream(client.getOutputStream());
+			toServer.writeBytes(process + '\n');
+			toServer.flush();
+		} catch (IOException ex){
+			ex.printStackTrace();
+		}
 	}
 
 	@Override
@@ -137,6 +152,7 @@ public class ClientImpl implements Client{
 		          UDPSocket.send(packetToSend);
 		          System.out.println("SENDING PACKET: " + count);
 		        } while (bytes_read < size);
+		      //  UDPSocket.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -145,11 +161,12 @@ public class ClientImpl implements Client{
 	@Override
 	public void receiveViaUDP() {
 		try {
+			//UDPSocket = new DatagramSocket();
 			byte[] dataReceived = new byte [100000];
 			DatagramPacket receivePacket = new DatagramPacket(dataReceived, dataReceived.length);
-            UDPSocket.receive(receivePacket);
+			UDPSocket.receive(receivePacket);
             System.out.println("RECEIVED: " + receivePacket.getLength());
-            File fileReceived = new File ("Audionew.wav");
+            File fileReceived = new File ("AudioNew.wav");
             FileOutputStream fileOut = new FileOutputStream(fileReceived);
             fileOut.write(receivePacket.getData());
             playAudio();

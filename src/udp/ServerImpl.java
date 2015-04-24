@@ -9,6 +9,7 @@ public class ServerImpl implements Server {
 	private ServerSocket newServerSocket;
 	private Socket newSocket;
 	private int port;
+	
 
 	public ServerImpl(int port){
 		this.port = port;
