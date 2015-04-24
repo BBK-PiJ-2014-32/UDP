@@ -66,6 +66,13 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 	}
 
 	@Override
+	public void tellClientToConnectOnUDP() throws IOException {
+		DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
+		String instruction = "Connect over UDP.";
+		toClient.writeBytes(instruction + '\n');
+	}
+	
+	@Override
 	public void listenForUDP() {
 		try{
 			dataSocket = new DatagramSocket(2000);
@@ -79,6 +86,8 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 			ex.printStackTrace();
 		}
 	}
+
+	
 
 	
 	
