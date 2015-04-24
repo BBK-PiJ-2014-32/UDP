@@ -18,4 +18,6 @@ public interface ServerClientHandler {
 	
 	void tellClientToConnectOnUDP()  throws IOException;
 	
+	void getProcess() throws IOException;
+	
 }
