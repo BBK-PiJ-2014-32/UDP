@@ -84,10 +84,13 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 	
 	@Override
 	public void listenForUDP() throws SocketException, IOException{
-			byte[] receiveData = new byte[1024];
-            receivePacket = new DatagramPacket(receiveData, receiveData.length);
+			byte[] receiveData = new byte[1000000];
+            
             System.out.println("WAITING FOR UDP CONNECTION");
             tellClientToConnectOnUDP();
+            receivePacket = new DatagramPacket(receiveData, receiveData.length);
+            dataSocket.receive(receivePacket);
+            System.out.println("RECEIVED: " + receivePacket.getLength());
 		}		
 
 	

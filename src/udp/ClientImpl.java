@@ -1,7 +1,10 @@
 package udp;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.DatagramPacket;
@@ -17,6 +20,11 @@ public class ClientImpl implements Client{
 	private int port;
 	private Integer uniqueId;
 	private String process;
+	private DatagramSocket UDPSocket;
+	private FileInputStream fileStream;
+	private BufferedInputStream bufferedStream;
+	private File fileToSend;
+	
 	
 	public ClientImpl(String host, int port){
 		this.hostName = host;
@@ -28,6 +36,11 @@ public class ClientImpl implements Client{
 		requestUniqueId(client);
 		isFirstToConnect();
 		recieveInstructionForUDP();
+			if(process.equals("sender")){
+				sendViaUDP();
+			} else {
+				receiveViaUDP();
+			}
 	}
 	
 	@Override
@@ -87,8 +100,10 @@ public class ClientImpl implements Client{
 		try {
 			BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			String instruction = fromServer.readLine();
-				if (instruction.equals("Connect over UDP.")){
+			System.out.println(instruction);
+				if (instruction.equals("CONNECT OVER UDP.")){
 					System.out.println("INSTRUCTION RECEIVED: " + instruction);
+					UDPSocket = new DatagramSocket();
 					//connect over UDP method called here.
 				}
 		} catch (IOException ex) {
@@ -100,11 +115,22 @@ public class ClientImpl implements Client{
 	@Override
 	public void sendViaUDP() {
 		try {
-			DatagramSocket newUDPSocket = new DatagramSocket();
+			byte[] dataToSend;
 			InetAddress IPAddress = InetAddress.getByName("localHost");
-			byte[] dataToSend = process.getBytes();
-			DatagramPacket packetToSend = new DatagramPacket(dataToSend, dataToSend.length, IPAddress, 2000);
-			newUDPSocket.send(packetToSend);
+			fileToSend = new File("AudioFile.wav");
+		    int size = (int) fileToSend.length();
+		    dataToSend = new byte[size];
+		    fileStream = new FileInputStream(fileToSend);
+		    int bytes_read = 0;
+		    int count;
+		    System.out.println("SENDING PACKET: ");
+		        do { 
+		          count = fileStream.read(dataToSend, bytes_read, size - bytes_read);
+		          bytes_read += count;
+		          DatagramPacket packetToSend = new DatagramPacket(dataToSend, dataToSend.length, IPAddress, 2000);
+		          UDPSocket.send(packetToSend);
+		          System.out.println("SENDING PACKET: " + count);
+		        } while (bytes_read < size);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
