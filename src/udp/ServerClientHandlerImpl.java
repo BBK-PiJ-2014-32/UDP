@@ -3,6 +3,8 @@ package udp;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
@@ -91,6 +93,9 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
             receivePacket = new DatagramPacket(receiveData, receiveData.length);
             dataSocket.receive(receivePacket);
             System.out.println("RECEIVED: " + receivePacket.getLength());
+            File fileReceived = new File ("Audionew.wav");
+            FileOutputStream fileOut = new FileOutputStream(fileReceived);
+            fileOut.write(receivePacket.getData());
 		}		
 
 	
