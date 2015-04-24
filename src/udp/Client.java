@@ -21,4 +21,6 @@ public interface Client {
 	void sendViaUDP();
 	
 	void receiveViaUDP();
+	
+	void playAudio();
 }

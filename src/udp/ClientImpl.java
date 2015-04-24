@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.DatagramPacket;
@@ -12,6 +14,8 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.Socket;
 import java.net.UnknownHostException;
+
+import sun.audio.*;
 
 public class ClientImpl implements Client{
 
@@ -139,17 +143,32 @@ public class ClientImpl implements Client{
 	@Override
 	public void receiveViaUDP() {
 		try {
-			DatagramSocket newUDPSocket = new DatagramSocket();
-			InetAddress IPAddress = InetAddress.getByName("localHost");
-			byte[] dataToSend = process.getBytes();
-			DatagramPacket packetToSend = new DatagramPacket(dataToSend, dataToSend.length, IPAddress, 2000);
-			newUDPSocket.send(packetToSend);
+			byte[] dataReceived = new byte [100000];
+			DatagramPacket receivePacket = new DatagramPacket(dataReceived, dataReceived.length);
+            UDPSocket.receive(receivePacket);
+            System.out.println("RECEIVED: " + receivePacket.getLength());
+            File fileReceived = new File ("Audionew.wav");
+            FileOutputStream fileOut = new FileOutputStream(fileReceived);
+            fileOut.write(receivePacket.getData());
+            
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 		
 	}
 
+	public void playAudio(){
+		try {
+			File fileToPlay = new File("AudioNew.wav");
+			fileStream = new FileInputStream(fileToPlay);
+			AudioStream audioStream = new AudioStream(fileStream);
+			AudioPlayer.player.start(audioStream);
+		} catch (FileNotFoundException ex) {
+			ex.printStackTrace();
+		} catch (IOException ex) { 
+			ex.printStackTrace();
+		}
+	}
 	
 
 
