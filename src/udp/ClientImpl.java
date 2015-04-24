@@ -85,6 +85,20 @@ public class ClientImpl implements Client{
 			ex.printStackTrace();
 		}
 	}
+	
+	@Override
+	public void recieveInstructionForUDP() {
+		try {
+			BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
+			String instruction = fromServer.readLine();
+				if (instruction.equals("Connect over UDP.")){
+					//connect over UDP method called here.
+				}
+		} catch (IOException ex) {
+			ex.printStackTrace();
+		}
+		
+	}
 
 	@Override
 	public void sendViaUDP() {
@@ -112,6 +126,8 @@ public class ClientImpl implements Client{
 		}
 		
 	}
+
+	
 
 
 
