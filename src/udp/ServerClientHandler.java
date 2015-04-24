@@ -1,6 +1,7 @@
 package udp;
 
 import java.io.IOException;
+import java.net.SocketException;
 
 /**
  * The ServerClientHandler sends the client the unique Id and then indicates if that client is a sender or 
@@ -13,7 +14,7 @@ public interface ServerClientHandler {
 	
 	void notifyClientIfFirst() throws IOException;
 	
-	void listenForUDP();
+	void listenForUDP() throws SocketException, IOException;
 	
 	void tellClientToConnectOnUDP()  throws IOException;
 	

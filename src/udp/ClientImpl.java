@@ -27,19 +27,15 @@ public class ClientImpl implements Client{
 		connectToServerViaTCP();
 		requestUniqueId(client);
 		isFirstToConnect();
-			if(process.equals("sender")){
-				sendViaUDP();
-			} else {
-				receiveViaUDP();
-			}
+		recieveInstructionForUDP();
 	}
 	
 	@Override
 	public void connectToServerViaTCP() {
 		try{
-			System.out.println("Trying to connect");
+			System.out.println("TRYING TO CONNECT");
 			client = new Socket(hostName, port);
-			System.out.println("Connected to host: " + hostName + "at port: " + port);
+			System.out.println("CONNECTED TO HOST: " + hostName + "AT PORT: " + port);
 		} catch (UnknownHostException ex){
 			ex.printStackTrace();
 		} catch (IOException ex){
@@ -53,12 +49,12 @@ public class ClientImpl implements Client{
 		try {
 			DataOutputStream toServer = new DataOutputStream(client.getOutputStream());
 			BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
-			System.out.println("Requesting unique id");
+			System.out.println("REQUESTING UNIQUE ID");
 			String idRequest = "send id";
 			toServer.writeBytes(idRequest + '\n');
 			String receivedId = fromServer.readLine();
 			uniqueId = Integer.parseInt(receivedId);
-			System.out.println("Unique Id: " + uniqueId + " received");
+			System.out.println("UNIQUE ID: " + uniqueId + " RECIEVED");
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -92,6 +88,7 @@ public class ClientImpl implements Client{
 			BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			String instruction = fromServer.readLine();
 				if (instruction.equals("Connect over UDP.")){
+					System.out.println("INSTRUCTION RECEIVED: " + instruction);
 					//connect over UDP method called here.
 				}
 		} catch (IOException ex) {

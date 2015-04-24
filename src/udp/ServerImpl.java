@@ -21,9 +21,9 @@ public class ServerImpl implements Server {
 			newSocket = null;
 			
 			while(true){
-				System.out.println("Server listening for clients");
+				System.out.println("SERVER LISTENING FOR CLIENTS");
 				newSocket = newServerSocket.accept();
-				System.out.println("Client has connected");
+				System.out.println("CLIENT CONNECTED");
 				Thread thread = new Thread(new ServerClientHandlerImpl(newSocket));
 		        thread.start();
 			}

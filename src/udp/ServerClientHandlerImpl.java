@@ -8,25 +8,34 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.Socket;
+import java.net.SocketException;
 
 public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 
 	private static Integer clientId = 0;
 	private Socket socket;
 	private DatagramSocket dataSocket;
+	private DatagramPacket receivePacket;
 	
 	public ServerClientHandlerImpl(Socket socket){
 		this.socket = socket;
-	}
+			try{
+				dataSocket = new DatagramSocket(2000);
+			} catch (IOException ex) {
+				ex.printStackTrace();
+			}
+		}
 	
 	@Override
 	public void run() {
 		try {
-			System.out.println("ServerClientHandler started");
+			System.out.println("SERVERCLIENTHANDLER STARTED");
 			sendUniqueId();
 			notifyClientIfFirst();
 			listenForUDP();
+			
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		} catch (InterruptedException ex) {
@@ -40,10 +49,10 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
         DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
 		clientId++;
 		String inText = fromClient.readLine();
-		System.out.println("Request Received: " + inText);
+		System.out.println("REQUEST RECEIVED: " + inText);
 		if(inText.equals("send id")){
 			toClient.writeBytes(clientId.toString() + '\n');
-			System.out.println("Client id: " + clientId + " sent.");
+			System.out.println("CLIENT ID: " + clientId + " SENT.");
 		} else {
 			System.out.println("Invalid request.");
 		}
@@ -54,7 +63,7 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 		BufferedReader fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
         DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
 		String inText = fromClient.readLine();
-		System.out.println("Request Received: " + inText);
+		System.out.println("REQUEST RECEIVED: " + inText);
 		if(inText.equals("first to connect?") && clientId.equals(1)){
 			System.out.println("Yes");
 			toClient.writeBytes("Yes" + '\n');
@@ -68,24 +77,18 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 	@Override
 	public void tellClientToConnectOnUDP() throws IOException {
 		DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
-		String instruction = "Connect over UDP.";
+		String instruction = "CONNECT OVER UDP.";
+		System.out.println(instruction);
 		toClient.writeBytes(instruction + '\n');
 	}
 	
 	@Override
-	public void listenForUDP() {
-		try{
-			dataSocket = new DatagramSocket(2000);
+	public void listenForUDP() throws SocketException, IOException{
 			byte[] receiveData = new byte[1024];
-            DatagramPacket receivePacket = new DatagramPacket(receiveData, receiveData.length);
-            System.out.println("Waiting for UDP connection");
-            dataSocket.receive(receivePacket);
-            String receivedText = new String(receivePacket.getData());
-            System.out.println("Connected to: " + receivedText);
-		} catch (IOException ex){
-			ex.printStackTrace();
-		}
-	}
+            receivePacket = new DatagramPacket(receiveData, receiveData.length);
+            System.out.println("WAITING FOR UDP CONNECTION");
+            tellClientToConnectOnUDP();
+		}		
 
 	
 
