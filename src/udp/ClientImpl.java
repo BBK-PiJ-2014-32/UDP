@@ -102,11 +102,13 @@ public class ClientImpl implements Client{
 	@Override
 	public void recieveInstructionForUDP() {
 		try {
+			DataOutputStream toServer = new DataOutputStream(client.getOutputStream());
 			BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			String instruction = fromServer.readLine();
 			System.out.println(instruction);
 				if (instruction.equals("CONNECT OVER UDP.")){
 					System.out.println("INSTRUCTION RECEIVED: " + instruction);
+					toServer.writeBytes(process + '\n');
 					UDPSocket = new DatagramSocket();
 					//connect over UDP method called here.
 				}
@@ -150,7 +152,7 @@ public class ClientImpl implements Client{
             File fileReceived = new File ("Audionew.wav");
             FileOutputStream fileOut = new FileOutputStream(fileReceived);
             fileOut.write(receivePacket.getData());
-            
+            playAudio();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}

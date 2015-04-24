@@ -20,6 +20,7 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 	private Socket socket;
 	private DatagramSocket dataSocket;
 	private DatagramPacket receivePacket;
+	private String clientProcess;
 	
 	public ServerClientHandlerImpl(Socket socket){
 		this.socket = socket;
@@ -78,10 +79,12 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 
 	@Override
 	public void tellClientToConnectOnUDP() throws IOException {
+		BufferedReader fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
 		String instruction = "CONNECT OVER UDP.";
 		System.out.println(instruction);
 		toClient.writeBytes(instruction + '\n');
+		clientProcess = fromClient.readLine();
 	}
 	
 	@Override
