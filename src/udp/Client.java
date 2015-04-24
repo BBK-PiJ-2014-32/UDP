@@ -18,6 +18,8 @@ public interface Client {
 	
 	void recieveInstructionForUDP();
 	
+	void sendProcessType();
+	
 	void sendViaUDP();
 	
 	void receiveViaUDP();

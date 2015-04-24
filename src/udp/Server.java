@@ -12,4 +12,5 @@ public interface Server {
  * Listen for clients trying to connect over TCP.
  */
 void listenForClients();
+
 }
