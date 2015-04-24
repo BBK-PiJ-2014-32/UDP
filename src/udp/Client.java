@@ -16,6 +16,8 @@ public interface Client {
 	
 	void isFirstToConnect();
 	
+	void recieveInstructionForUDP();
+	
 	void sendViaUDP();
 	
 	void receiveViaUDP();
