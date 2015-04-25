@@ -24,13 +24,9 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 	private DatagramPacket receivePacket;
 	private String clientProcess;
 	private FileInputStream fileStream;
-	private BufferedInputStream bufferedStream;
 	private File fileToSend;
-	private static InetAddress clientIPAddress;
-	private static int clientPort; 
 	private BufferedReader fromClient;
 	private DataOutputStream toClient;
-	private static int fileSendSize;
 	
 	
 	
@@ -49,10 +45,7 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 			System.out.println("SERVERCLIENTHANDLER STARTED");
 			sendUniqueId();
 			notifyClientIfFirst();
-			System.out.println("dataSocket closed = " + dataSocket.isClosed());
 			listenForUDP();
-			System.out.println("dataSocket closed = " + dataSocket.isClosed());
-			System.out.println("dataSocket bound = " + dataSocket.isBound());
 			
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -79,8 +72,6 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 	
 	@Override
 	public void notifyClientIfFirst() throws IOException {
-		//BufferedReader fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-        //DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
 		String inText = fromClient.readLine();
 		System.out.println("REQUEST RECEIVED: " + inText);
 		if(inText.equals("first to connect?") && clientId.equals(1)){
@@ -99,7 +90,6 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 
 	@Override
 	public void tellClientToConnectOnUDP() throws IOException {
-		//DataOutputStream toClient = new DataOutputStream(socket.getOutputStream());
 		String instruction = "CONNECT OVER UDP.";
 		System.out.println(instruction);
 		toClient.writeBytes(instruction + '\n');
@@ -108,7 +98,6 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 	
 	@Override
 	public void getProcess() throws IOException {
-		//BufferedReader fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 		clientProcess = fromClient.readLine();
 		System.out.println("CONNECTED WITH: " + clientProcess);
 	}
@@ -118,7 +107,6 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 			byte[] receiveData = new byte[1000000];
             System.out.println("WAITING FOR UDP CONNECTION");
             tellClientToConnectOnUDP();
-            //getProcess();
             System.out.println("Processing: " + clientProcess);
             	if(clientProcess.equals("sender")){
             		System.out.println("Executing: " + clientProcess);
@@ -129,25 +117,14 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
             		File fileReceived = new File ("AudioNew.wav");
             		FileOutputStream fileOut = new FileOutputStream(fileReceived);
             		fileOut.write(receivePacket.getData(), 0, packetSize);
-            		clientIPAddress = receivePacket.getAddress();
-            		clientPort = receivePacket.getPort();
-            		System.out.println("IP =  " + clientIPAddress);
-            		System.out.println("Port =  " + clientPort);
-            		//String toSend = "hello";
-            		//byte[] sendData = toSend.getBytes();
-            		//DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientIPAddress, clientPort);
-            		//dataSocket.send(sendPacket);
             		dataSocket.close();
+            		fileOut.close();
             	} else if (clientProcess.equals("receiver")){
             		byte[] dataReceived = new byte [1024];
         			DatagramPacket receivePacket = new DatagramPacket(dataReceived, dataReceived.length);
         			dataSocket.receive(receivePacket);
         			String toPrint = new String(receivePacket.getData());
         			System.out.println("RECEIVED = " + toPrint);
-            		
-            		
-            		System.out.println("IP =  " + clientIPAddress);
-            		System.out.println("Port =  " + clientPort);
             		byte[] dataToSend;
         			fileToSend = new File("AudioNew.wav");
         		    int size = (int) fileToSend.length();
