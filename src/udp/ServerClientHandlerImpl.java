@@ -133,8 +133,19 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
             		clientPort = receivePacket.getPort();
             		System.out.println("IP =  " + clientIPAddress);
             		System.out.println("Port =  " + clientPort);
+            		//String toSend = "hello";
+            		//byte[] sendData = toSend.getBytes();
+            		//DatagramPacket sendPacket = new DatagramPacket(sendData, sendData.length, clientIPAddress, clientPort);
+            		//dataSocket.send(sendPacket);
             		dataSocket.close();
             	} else if (clientProcess.equals("receiver")){
+            		byte[] dataReceived = new byte [1024];
+        			DatagramPacket receivePacket = new DatagramPacket(dataReceived, dataReceived.length);
+        			dataSocket.receive(receivePacket);
+        			String toPrint = new String(receivePacket.getData());
+        			System.out.println("RECEIVED = " + toPrint);
+            		
+            		
             		System.out.println("IP =  " + clientIPAddress);
             		System.out.println("Port =  " + clientPort);
             		byte[] dataToSend;
@@ -149,10 +160,11 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
         		        do { 
         		          count = fileStream.read(dataToSend, bytes_read, size - bytes_read);
         		          bytes_read += count;
-        		          DatagramPacket packetToSend = new DatagramPacket(dataToSend, dataToSend.length, clientIPAddress, clientPort);
+        		          DatagramPacket packetToSend = new DatagramPacket(dataToSend, dataToSend.length, receivePacket.getAddress(), receivePacket.getPort());
         		          dataSocket.send(packetToSend);
         		          System.out.println("SENDING PACKET: " + count);
         		        } while (bytes_read < size);
+        		    dataSocket.close();
             	}
             }		
 

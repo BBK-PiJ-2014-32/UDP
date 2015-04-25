@@ -152,7 +152,11 @@ public class ClientImpl implements Client{
 		          UDPSocket.send(packetToSend);
 		          System.out.println("SENDING PACKET: " + count);
 		        } while (bytes_read < size);
-		      //  UDPSocket.close();
+		    //byte[] dataReceived = new byte [100000];
+			//DatagramPacket receivePacket = new DatagramPacket(dataReceived, dataReceived.length);
+			//UDPSocket.receive(receivePacket);
+			//String toPrint = new String(receivePacket.getData());
+			//System.out.println("RECEIVED = " + toPrint);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -161,12 +165,16 @@ public class ClientImpl implements Client{
 	@Override
 	public void receiveViaUDP() {
 		try {
-			//UDPSocket = new DatagramSocket();
+			String toSend = "READY FOR AUDIO";
+    		byte[] dataToSend = toSend.getBytes();
+			InetAddress IPAddress = InetAddress.getByName("localHost");
+			DatagramPacket sendPacket = new DatagramPacket(dataToSend, dataToSend.length, IPAddress, 2000);
+			UDPSocket.send(sendPacket);
 			byte[] dataReceived = new byte [100000];
 			DatagramPacket receivePacket = new DatagramPacket(dataReceived, dataReceived.length);
 			UDPSocket.receive(receivePacket);
             System.out.println("RECEIVED: " + receivePacket.getLength());
-            File fileReceived = new File ("AudioNew.wav");
+            File fileReceived = new File ("AudioPlay.wav");
             FileOutputStream fileOut = new FileOutputStream(fileReceived);
             fileOut.write(receivePacket.getData());
             playAudio();
@@ -178,6 +186,7 @@ public class ClientImpl implements Client{
 
 	public void playAudio(){
 		try {
+			System.out.println("Playing audio");
 			File fileToPlay = new File("AudioNew.wav");
 			fileStream = new FileInputStream(fileToPlay);
 			AudioStream audioStream = new AudioStream(fileStream);
