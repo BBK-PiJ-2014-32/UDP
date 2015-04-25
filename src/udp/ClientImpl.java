@@ -85,8 +85,6 @@ public class ClientImpl implements Client{
 	@Override
 	public void isFirstToConnect() {
 		try {
-			//DataOutputStream toServer = new DataOutputStream(client.getOutputStream());
-			//BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			System.out.println("Am I the first to connect");
 			String firstRequest = "first to connect?";
 			toServer.writeBytes(firstRequest + '\n');
@@ -108,29 +106,16 @@ public class ClientImpl implements Client{
 	@Override
 	public void recieveInstructionForUDP() {
 		try {
-			//BufferedReader fromServer = new BufferedReader(new InputStreamReader(client.getInputStream()));
 			String instruction = fromServer.readLine();
 			System.out.println(instruction);
 				if (instruction.equals("CONNECT OVER UDP.")){
 					System.out.println("INSTRUCTION RECEIVED: " + instruction);
 					UDPSocket = new DatagramSocket();
-					//sendProcessType();
 				}
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 		
-	}
-	
-	@Override
-	public void sendProcessType(){
-		try {
-			//DataOutputStream toServer = new DataOutputStream(client.getOutputStream());
-			toServer.writeBytes(process + '\n');
-			toServer.flush();
-		} catch (IOException ex){
-			ex.printStackTrace();
-		}
 	}
 
 	@Override
@@ -151,12 +136,7 @@ public class ClientImpl implements Client{
 		          DatagramPacket packetToSend = new DatagramPacket(dataToSend, dataToSend.length, IPAddress, 2000);
 		          UDPSocket.send(packetToSend);
 		          System.out.println("SENDING PACKET: " + count);
-		        } while (bytes_read < size);
-		    //byte[] dataReceived = new byte [100000];
-			//DatagramPacket receivePacket = new DatagramPacket(dataReceived, dataReceived.length);
-			//UDPSocket.receive(receivePacket);
-			//String toPrint = new String(receivePacket.getData());
-			//System.out.println("RECEIVED = " + toPrint);
+		        } while (bytes_read < size);;
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -178,10 +158,10 @@ public class ClientImpl implements Client{
             FileOutputStream fileOut = new FileOutputStream(fileReceived);
             fileOut.write(receivePacket.getData());
             playAudio();
+            fileOut.close();
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
-		
 	}
 
 	public void playAudio(){
@@ -197,9 +177,5 @@ public class ClientImpl implements Client{
 			ex.printStackTrace();
 		}
 	}
-	
-
-
-
 
 }
