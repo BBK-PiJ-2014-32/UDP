@@ -57,7 +57,7 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 		if(inText.equals("send id")){
 			toClient.writeBytes(clientId.toString() + '\n');
 			toClient.flush();
-			System.out.println("CLIENT ID: " + clientId + " SENT.");
+			System.out.println("CLIENT ID: " + clientId + " ALLOCATED.");
 		} else {
 			System.out.println("Invalid request.");
 		}
@@ -66,14 +66,13 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 	@Override
 	public void notifyClientIfFirst() throws IOException {
 		String inText = fromClient.readLine();
-		System.out.println("REQUEST RECEIVED: " + inText);
 		if(inText.equals("first to connect?") && clientId.equals(1)){
-			System.out.println("Yes");
+			System.out.println("ALLOCATING: sender");
 			clientProcess = "sender";
 			toClient.writeBytes("Yes" + '\n');
 			toClient.flush();
 		} else {
-			System.out.println("No");
+			System.out.println("ALLOCATING: receiver");
 			clientProcess = "receiver";
 			toClient.writeBytes("No" + '\n');
 			toClient.flush();
@@ -84,15 +83,8 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 	@Override
 	public void tellClientToConnectOnUDP() throws IOException {
 		String instruction = "CONNECT OVER UDP.";
-		System.out.println(instruction);
 		toClient.writeBytes(instruction + '\n');
 		toClient.flush();
-	}
-	
-	@Override
-	public void getProcess() throws IOException {
-		clientProcess = fromClient.readLine();
-		System.out.println("CONNECTED WITH: " + clientProcess);
 	}
 	
 	@Override
@@ -100,9 +92,8 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 			byte[] receiveData = new byte[1000000];
             System.out.println("WAITING FOR UDP CONNECTION");
             tellClientToConnectOnUDP();
-            System.out.println("Processing: " + clientProcess);
+            System.out.println("PROCESSING: " + clientProcess);
             	if(clientProcess.equals("sender")){
-            		System.out.println("Executing: " + clientProcess);
             		receivePacket = new DatagramPacket(receiveData, receiveData.length);
             		dataSocket.receive(receivePacket);
             		int packetSize = receivePacket.getLength();
@@ -115,17 +106,11 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
         			DatagramPacket receivePacket = new DatagramPacket(dataReceived, dataReceived.length);
         			dataSocket.receive(receivePacket);
         			String toPrint = new String(receivePacket.getData());
-        			System.out.println("RECEIVED = " + toPrint); 
-        		    System.out.println("SENDING PACKET: ");
+        		    System.out.println("SENDING: " + audioData.length + " bytes");
         		    DatagramPacket packetToSend = new DatagramPacket(audioData, audioData.length, receivePacket.getAddress(), receivePacket.getPort());
         		    dataSocket.send(packetToSend);
-        		    System.out.println(audioData.length + "bytes sent");
         		    dataSocket.close();
             	}
             }		
-
-	
-
-	
 	
 }
