@@ -126,17 +126,11 @@ public class ClientImpl implements Client{
 		    int size = (int) fileToSend.length();
 		    dataToSend = new byte[size];
 		    fileStream = new FileInputStream(fileToSend);
-		    int bytes_read = 0;
-		    int count;
 		    System.out.println("SENDING PACKET: ");
-		    do { 
-		          count = fileStream.read(dataToSend, bytes_read, size - bytes_read);
-		          System.out.println("bytes read = " + bytes_read);
-		          bytes_read += count;
-		          DatagramPacket packetToSend = new DatagramPacket(dataToSend, dataToSend.length, IPAddress, 2000);
-		          UDPSocket.send(packetToSend);
-		          System.out.println("SENDING PACKET: " + count);
-		        } while (bytes_read < size);;
+		    fileStream.read(dataToSend);
+		    DatagramPacket packetToSend = new DatagramPacket(dataToSend, dataToSend.length, IPAddress, 2000);
+		    UDPSocket.send(packetToSend);
+		    System.out.println("SENDING PACKET: " + dataToSend.length + " bytes");
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
