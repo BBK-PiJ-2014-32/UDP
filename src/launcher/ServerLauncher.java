@@ -2,6 +2,8 @@ package launcher;
 
 /**
  * The ServerLauncher initializes the server program to be used by the clients.
+ * 
+ * @author P Hannant
  */
 public interface ServerLauncher {
 	

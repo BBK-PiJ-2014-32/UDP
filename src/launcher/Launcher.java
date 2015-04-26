@@ -2,7 +2,9 @@ package launcher;
 
 /**
  * The launcher is used to create and run the clients that connect to the server, send the audio
- * and play the audio bytes received..
+ * and play the audio bytes received.
+ * 
+ * @author P Hannant
  */
 public interface Launcher {
 
