@@ -37,7 +37,7 @@ public class ClientImpl implements Client{
 		connectToServerViaTCP();
 		requestUniqueId(client);
 		isFirstToConnect();
-		recieveInstructionForUDP();
+		receiveInstructionForUDP();
 			if(process.equals("sender")){
 				sendViaUDP();
 			} else {
@@ -95,7 +95,7 @@ public class ClientImpl implements Client{
 	}
 	
 	@Override
-	public void recieveInstructionForUDP() {
+	public void receiveInstructionForUDP() {
 		try {
 			String instruction = fromServer.readLine();
 			System.out.println(instruction);
