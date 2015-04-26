@@ -14,25 +14,57 @@ import java.net.UnknownHostException;
 
 import sun.audio.*;
 
+/**
+ * The Client class.
+ * @see udp.Client
+ */
 public class ClientImpl implements Client{
 
+	/** The host name. */
 	private String hostName;
+	
+	/** The client. */
 	private Socket client;
+	
+	/** The port. */
 	private int port;
+	
+	/** The unique id. */
 	private Integer uniqueId;
+	
+	/** The process. */
 	private String process;
+	
+	/** The UDP socket. */
 	private DatagramSocket UDPSocket;
+	
+	/** The file stream. */
 	private FileInputStream fileStream;
+	
+	/** The file to send. */
 	private File fileToSend;
+	
+	/** The to server. */
 	private DataOutputStream toServer;
+	
+	/** The from server. */
 	private BufferedReader fromServer;
 	
 	
+	/**
+	 * Instantiates a new client with the supplied hostname and port number.
+	 *
+	 * @param host the host
+	 * @param port the port
+	 */
 	public ClientImpl(String host, int port){
 		this.hostName = host;
 		this.port = port;
 	}
 	
+	/**
+	 * The run method which intiates the client/server commnication.
+	 */
 	public void run(){
 		connectToServerViaTCP();
 		requestUniqueId(client);
@@ -45,6 +77,9 @@ public class ClientImpl implements Client{
 			}
 	}
 	
+	/**
+	 * @see udp.Client#connectToServerViaTCP()
+	 */
 	@Override
 	public void connectToServerViaTCP() {
 		try{
@@ -59,6 +94,9 @@ public class ClientImpl implements Client{
 		
 	}
 
+	/**
+	 * @see udp.Client#requestUniqueId(java.net.Socket)
+	 */
 	@Override
 	public void requestUniqueId(Socket client) {
 		try {
@@ -76,6 +114,9 @@ public class ClientImpl implements Client{
 		}
 	}
 
+	/**
+	 * @see udp.Client#isFirstToConnect()
+	 */
 	@Override
 	public void isFirstToConnect() {
 		try {
@@ -94,6 +135,9 @@ public class ClientImpl implements Client{
 		}
 	}
 	
+	/**
+	 * @see udp.Client#receiveInstructionForUDP()
+	 */
 	@Override
 	public void receiveInstructionForUDP() {
 		try {
@@ -109,6 +153,9 @@ public class ClientImpl implements Client{
 		
 	}
 
+	/**
+	 * @see udp.Client#sendViaUDP()
+	 */
 	@Override
 	public void sendViaUDP() {
 		try {
@@ -128,6 +175,9 @@ public class ClientImpl implements Client{
 		}
 	}
 
+	/**
+	 * @see udp.Client#receiveViaUDP()
+	 */
 	@Override
 	public void receiveViaUDP() {
 		try {
@@ -146,6 +196,9 @@ public class ClientImpl implements Client{
 		}
 	}
 
+	/**
+	 * @see udp.Client#playAudio(byte[])
+	 */
 	public void playAudio(byte [] audioBytes){
 		System.out.println("PLAYING AUDIO");
 		AudioData audioData = new AudioData(audioBytes);

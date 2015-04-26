@@ -6,7 +6,9 @@ import java.net.Socket;
 
 
 /**
- * The Class ServerImpl.
+ * The Server class implementation.
+ * @see udp.Server
+ * 
  */
 public class ServerImpl implements Server {
 	
@@ -22,12 +24,12 @@ public class ServerImpl implements Server {
 	/** The thread count. */
 	private int threadCount = 0;
 	
-	/** The running. */
+	/** The running boolean. */
 	private boolean running = true;
 	
 
 	/**
-	 * Instantiates a new server impl.
+	 * Instantiates a new server.
 	 *
 	 * @param port the port
 	 */
