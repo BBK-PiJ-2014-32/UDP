@@ -27,6 +27,7 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 	private File fileToSend;
 	private BufferedReader fromClient;
 	private DataOutputStream toClient;
+	private static byte[] audioData;
 	
 	
 	
@@ -113,34 +114,21 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
             		receivePacket = new DatagramPacket(receiveData, receiveData.length);
             		dataSocket.receive(receivePacket);
             		int packetSize = receivePacket.getLength();
+            		audioData = new byte [packetSize];
             		System.out.println("RECEIVED: " + packetSize);
-            		File fileReceived = new File ("AudioNew.wav");
-            		FileOutputStream fileOut = new FileOutputStream(fileReceived);
-            		fileOut.write(receivePacket.getData(), 0, packetSize);
+            		System.arraycopy(receivePacket.getData(), 0, audioData, 0, packetSize);
             		dataSocket.close();
-            		fileOut.close();
             	} else if (clientProcess.equals("receiver")){
             		byte[] dataReceived = new byte [1024];
         			DatagramPacket receivePacket = new DatagramPacket(dataReceived, dataReceived.length);
         			dataSocket.receive(receivePacket);
         			String toPrint = new String(receivePacket.getData());
-        			System.out.println("RECEIVED = " + toPrint);
-            		byte[] dataToSend;
-        			fileToSend = new File("AudioNew.wav");
-        		    int size = (int) fileToSend.length();
-        		    System.out.println("Size = " + size);
-        		    dataToSend = new byte[size];
-        		    fileStream = new FileInputStream(fileToSend);
-        		    int bytes_read = 0;
-        		    int count;
+        			System.out.println("RECEIVED = " + toPrint); 
+        		    System.out.println("Size = " + audioData.length);
         		    System.out.println("SENDING PACKET: ");
-        		        do { 
-        		          count = fileStream.read(dataToSend, bytes_read, size - bytes_read);
-        		          bytes_read += count;
-        		          DatagramPacket packetToSend = new DatagramPacket(dataToSend, dataToSend.length, receivePacket.getAddress(), receivePacket.getPort());
-        		          dataSocket.send(packetToSend);
-        		          System.out.println("SENDING PACKET: " + count);
-        		        } while (bytes_read < size);
+        		    DatagramPacket packetToSend = new DatagramPacket(audioData, audioData.length, receivePacket.getAddress(), receivePacket.getPort());
+        		    dataSocket.send(packetToSend);
+        		    System.out.println("SENDING PACKET: " + audioData.length);
         		    dataSocket.close();
             	}
             }		
