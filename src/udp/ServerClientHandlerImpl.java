@@ -1,18 +1,12 @@
 package udp;
 
-import java.io.BufferedInputStream;
+
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.DataOutputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
-import java.net.InetAddress;
 import java.net.Socket;
 import java.net.SocketException;
 
@@ -23,8 +17,6 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 	private DatagramSocket dataSocket;
 	private DatagramPacket receivePacket;
 	private String clientProcess;
-	private FileInputStream fileStream;
-	private File fileToSend;
 	private BufferedReader fromClient;
 	private DataOutputStream toClient;
 	private static byte[] audioData;
@@ -115,7 +107,7 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
             		dataSocket.receive(receivePacket);
             		int packetSize = receivePacket.getLength();
             		audioData = new byte [packetSize];
-            		System.out.println("RECEIVED: " + packetSize + "bytes");
+            		System.out.println("RECEIVED: " + packetSize + " bytes");
             		System.arraycopy(receivePacket.getData(), 0, audioData, 0, packetSize);
             		dataSocket.close();
             	} else if (clientProcess.equals("receiver")){
