@@ -13,6 +13,8 @@ public interface Client {
 
 	/**
 	 * Connects to the server via a TCP socket connection.
+	 * @exception UnknownHostException
+	 * @exception IOException
 	 */
 	void connectToServerViaTCP();
 	
@@ -20,27 +22,36 @@ public interface Client {
 	 * Requests a unique id from the server, which is used to allocate what process
 	 * the client will be carrying out.
 	 *
+	 * @exception IOException
 	 * @param the socket which the client is connected on. 
 	 */
 	void requestUniqueId(Socket client);
 	
 	/**
-	 * Checks if is first to connect and if it is the client is allocated as the sender..
+	 * Checks if is first to connect and if it is the client is allocated as the sender.
+	 * 
+	 * @exception IOException
 	 */
 	void isFirstToConnect();
 	
 	/**
 	 * Receives the instruction from the server to connect over UDP.
+	 * 
+	 * @exception IOException
 	 */
 	void receiveInstructionForUDP();
 	
 	/**
 	 * Sends the audio file over UDP to the server.
+	 * 
+	 * @exception IOException
 	 */
 	void sendViaUDP();
 	
 	/**
 	 * Receives the byte array from the server via UDP.
+	 * 
+	 * @exception IOException
 	 */
 	void receiveViaUDP();
 	
