@@ -1,6 +1,5 @@
 package udp;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
@@ -26,7 +25,7 @@ public class ClientImpl implements Client{
 	private String process;
 	private DatagramSocket UDPSocket;
 	private FileInputStream fileStream;
-	private BufferedInputStream bufferedStream;
+	//private BufferedInputStream bufferedStream;
 	private File fileToSend;
 	private DataOutputStream toServer;
 	private BufferedReader fromServer;
@@ -123,15 +122,16 @@ public class ClientImpl implements Client{
 		try {
 			byte[] dataToSend;
 			InetAddress IPAddress = InetAddress.getByName("localHost");
-			fileToSend = new File("AudioFile.wav");
+			fileToSend = new File("AudioFile1.wav");
 		    int size = (int) fileToSend.length();
 		    dataToSend = new byte[size];
 		    fileStream = new FileInputStream(fileToSend);
 		    int bytes_read = 0;
 		    int count;
 		    System.out.println("SENDING PACKET: ");
-		        do { 
+		    do { 
 		          count = fileStream.read(dataToSend, bytes_read, size - bytes_read);
+		          System.out.println("bytes read = " + bytes_read);
 		          bytes_read += count;
 		          DatagramPacket packetToSend = new DatagramPacket(dataToSend, dataToSend.length, IPAddress, 2000);
 		          UDPSocket.send(packetToSend);
@@ -154,28 +154,17 @@ public class ClientImpl implements Client{
 			DatagramPacket receivePacket = new DatagramPacket(dataReceived, dataReceived.length);
 			UDPSocket.receive(receivePacket);
             System.out.println("RECEIVED: " + receivePacket.getLength());
-            File fileReceived = new File ("AudioPlay.wav");
-            FileOutputStream fileOut = new FileOutputStream(fileReceived);
-            fileOut.write(receivePacket.getData());
-            playAudio();
-            fileOut.close();
+            playAudio(receivePacket.getData());
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
 	}
 
-	public void playAudio(){
-		try {
-			System.out.println("Playing audio");
-			File fileToPlay = new File("AudioNew.wav");
-			fileStream = new FileInputStream(fileToPlay);
-			AudioStream audioStream = new AudioStream(fileStream);
-			AudioPlayer.player.start(audioStream);
-		} catch (FileNotFoundException ex) {
-			ex.printStackTrace();
-		} catch (IOException ex) { 
-			ex.printStackTrace();
-		}
+	public void playAudio(byte [] audioBytes){
+		System.out.println("Playing audio");
+		AudioData audioData = new AudioData(audioBytes);
+		AudioDataStream audioStream = new AudioDataStream(audioData);
+		AudioPlayer.player.start(audioStream);
 	}
 
 }
