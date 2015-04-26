@@ -11,6 +11,7 @@ public class Launcher {
 	private Scanner scan;
 	private boolean running;
 	private int count = 0;
+	private static ServerImpl server;
 
 	public static void main(String[] args){
 		
@@ -52,7 +53,7 @@ public class Launcher {
 	@SuppressWarnings("static-access")
 	public static void startServer(){
 		try {
-			ServerImpl server = new ServerImpl(2000);
+			server = new ServerImpl(2000);
 			server.main(args);
 			System.out.println("Server started.");
 		} catch (IOException ex) {
@@ -66,6 +67,6 @@ public class Launcher {
 	}
 	
 	public void closeServer(){
-		///
+		server.closeServer();
 	}
 }
