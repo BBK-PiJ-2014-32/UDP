@@ -35,17 +35,32 @@ public class LauncherImpl implements Launcher{
 		System.out.println("* Press '9' to close.                                 *");
 		System.out.println("*******************************************************");
 		scan = new Scanner(System.in);
-		running = true;
-		while(!running){
-			System.out.println("");
-			if(scan.next().equals("1")){
+		System.out.println("Please choose an option: ");
+		String str = scan.nextLine();
+		switch (str) {
+			case "1":
 				startServer();
-			} else if (scan.next().equals("2")){
+			case "2":
 				createClient();
 				count++;
-			} else if (scan.next().equals("9")|| count == 10){
+			case "9":
+				closeServer();
+			default:
+				System.out.println("Invalid choice.");
+		
+		/*while(running){
+		
+			if(str.equals("1")){
+				startServer();
+			} else if (str.equals("2")){
+				createClient();
+				count++;
+				
+			} else if (str.equals("9")|| count == 10){
 				running = false;
-			}
+			} else {
+				System.out.println("Invalid choice.");
+			}*/
 		}
 		
 	}
