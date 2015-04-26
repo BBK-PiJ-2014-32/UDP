@@ -22,5 +22,5 @@ public interface Client {
 	
 	void receiveViaUDP();
 	
-	void playAudio();
+	void playAudio(byte[] audioBytes);
 }
