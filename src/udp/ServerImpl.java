@@ -4,19 +4,41 @@ import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
 
+
+/**
+ * The Class ServerImpl.
+ */
 public class ServerImpl implements Server {
 	
+	/** The new server socket. */
 	private ServerSocket newServerSocket;
+	
+	/** The new socket. */
 	private Socket newSocket;
+	
+	/** The port. */
 	private int port;
+	
+	/** The thread count. */
 	private int threadCount = 0;
+	
+	/** The running. */
 	private boolean running = true;
 	
 
+	/**
+	 * Instantiates a new server impl.
+	 *
+	 * @param port the port
+	 */
 	public ServerImpl(int port){
 		this.port = port;
 	}
 	
+	
+	/**
+	 *@see udp.Server#listenForClients() 
+	 */
 	@Override
 	public void listenForClients() {
 		try {
@@ -47,6 +69,13 @@ public class ServerImpl implements Server {
 		}
 		
 	}
+	
+	/**
+	 * The main method.
+	 *
+	 * @param args the arguments
+	 * @throws IOException Signals that an I/O exception has occurred.
+	 */
 	public static void main(String [] args) throws IOException {
 		int portNumber = 2000;
 	    
@@ -54,6 +83,9 @@ public class ServerImpl implements Server {
 	    newServer.listenForClients();
 	}
 
+	/**
+	 * @see udp.Server#closeServer()
+	 */
 	@Override
 	public void closeServer() {
 		try {
