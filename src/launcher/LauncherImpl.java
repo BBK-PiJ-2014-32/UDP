@@ -40,14 +40,12 @@ public class LauncherImpl implements Launcher{
 		System.out.println("* clients will then play the audio received.           *"); 
 		System.out.println("* The launcher will create and run 10 clients and then *");
 		System.out.println("* close once all audio has been recevied.              *");
+		System.out.println("* Hit return to begin.                                 *");
 		System.out.println("********************************************************");
 		scan = new Scanner(System.in);
-		System.out.println("* Type 'Yes' to begin: ");	
 		String str = scan.nextLine();
-			if (str.equals("Yes")){
+			if (str.equals("")){
 				createClient();
-			} else {
-				System.out.println("Invalid choice.");
 			}
 		
 	}
