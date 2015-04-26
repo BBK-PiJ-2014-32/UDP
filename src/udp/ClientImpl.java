@@ -23,7 +23,6 @@ public class ClientImpl implements Client{
 	private String process;
 	private DatagramSocket UDPSocket;
 	private FileInputStream fileStream;
-	//private BufferedInputStream bufferedStream;
 	private File fileToSend;
 	private DataOutputStream toServer;
 	private BufferedReader fromServer;
@@ -38,12 +37,10 @@ public class ClientImpl implements Client{
 		connectToServerViaTCP();
 		requestUniqueId(client);
 		isFirstToConnect();
-		System.out.println("client is a: " + process);
 		recieveInstructionForUDP();
 			if(process.equals("sender")){
 				sendViaUDP();
 			} else {
-				System.out.println("Connecting to receive via UDP");
 				receiveViaUDP();
 			}
 	}
@@ -53,7 +50,7 @@ public class ClientImpl implements Client{
 		try{
 			System.out.println("TRYING TO CONNECT");
 			client = new Socket(hostName, port);
-			System.out.println("CONNECTED TO HOST: " + hostName + "AT PORT: " + port);
+			System.out.println("CONNECTED TO HOST: " + hostName + " AT PORT: " + port);
 		} catch (UnknownHostException ex){
 			ex.printStackTrace();
 		} catch (IOException ex){
@@ -73,7 +70,7 @@ public class ClientImpl implements Client{
 			toServer.flush();
 			String receivedId = fromServer.readLine();
 			uniqueId = Integer.parseInt(receivedId);
-			System.out.println("UNIQUE ID: " + uniqueId + " RECIEVED");
+			System.out.println("UNIQUE ID IS: " + uniqueId);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -82,19 +79,16 @@ public class ClientImpl implements Client{
 	@Override
 	public void isFirstToConnect() {
 		try {
-			System.out.println("Am I the first to connect");
 			String firstRequest = "first to connect?";
 			toServer.writeBytes(firstRequest + '\n');
 			toServer.flush();
 			String receivedText = fromServer.readLine();
-			System.out.println("First to connect? " + receivedText);
 				if(receivedText.equals("Yes")){
-					System.out.println("First to connect");
 					process = "sender";
 				} else {
-					System.out.println("Not first to connect");
 					process = "receiver";	
 				}	
+		System.out.println("CLIENT " + uniqueId + " IS A: " + process);
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -124,11 +118,11 @@ public class ClientImpl implements Client{
 		    int size = (int) fileToSend.length();
 		    dataToSend = new byte[size];
 		    fileStream = new FileInputStream(fileToSend);
-		    System.out.println("SENDING PACKET: ");
+		    System.out.println("SENDING: " + size + " bytes");
 		    fileStream.read(dataToSend);
 		    DatagramPacket packetToSend = new DatagramPacket(dataToSend, dataToSend.length, IPAddress, 2000);
 		    UDPSocket.send(packetToSend);
-		    System.out.println("SENDING PACKET: " + dataToSend.length + " bytes");
+		    System.out.println("SENDING COMPLETE");
 		} catch (IOException ex) {
 			ex.printStackTrace();
 		}
@@ -145,7 +139,7 @@ public class ClientImpl implements Client{
 			byte[] dataReceived = new byte [100000];
 			DatagramPacket receivePacket = new DatagramPacket(dataReceived, dataReceived.length);
 			UDPSocket.receive(receivePacket);
-            System.out.println("RECEIVED: " + receivePacket.getLength());
+            System.out.println("RECEIVED: " + receivePacket.getLength() + " bytes");
             playAudio(receivePacket.getData());
 		} catch (IOException ex) {
 			ex.printStackTrace();
@@ -153,7 +147,7 @@ public class ClientImpl implements Client{
 	}
 
 	public void playAudio(byte [] audioBytes){
-		System.out.println("Playing audio");
+		System.out.println("PLAYING AUDIO");
 		AudioData audioData = new AudioData(audioBytes);
 		AudioDataStream audioStream = new AudioDataStream(audioData);
 		AudioPlayer.player.start(audioStream);

@@ -30,11 +30,17 @@ public class ServerImpl implements Server {
 				Thread thread = new Thread(new ServerClientHandlerImpl(newSocket));
 		        thread.start();
 		        threadCount++;
-		        if(threadCount == 10){
-		        	running = false;
-		        }
-		        closeServer();
+		        System.out.println(threadCount);
+		        	if(threadCount == 10){
+		        		running = false;
+		        	}
+				}	
+			try {
+				Thread.sleep(2000); 
+			} catch (InterruptedException ex){
+				ex.printStackTrace();
 			}
+			closeServer();
 			
 		} catch (IOException ex){
 			ex.printStackTrace();
