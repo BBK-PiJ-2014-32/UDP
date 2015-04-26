@@ -10,19 +10,43 @@ import java.net.DatagramSocket;
 import java.net.Socket;
 import java.net.SocketException;
 
+/**
+ * The Server Client Handler class.
+ * @see udp.ServerClientHandler
+ */
 public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 
+	/** The client id. */
 	private static Integer clientId = 0;
+	
+	/** The socket. */
 	private Socket socket;
+	
+	/** The data socket. */
 	private DatagramSocket dataSocket;
+	
+	/** The receive packet. */
 	private DatagramPacket receivePacket;
+	
+	/** The client process. */
 	private String clientProcess;
+	
+	/** The from client. */
 	private BufferedReader fromClient;
+	
+	/** The tcp connection to the client. */
 	private DataOutputStream toClient;
+	
+	/** The byte array of the audio data. */
 	private static byte[] audioData;
 	
 	
 	
+	/**
+	 * Instantiates a new server client handler.
+	 *
+	 * @param the TCP socket 
+	 */
 	public ServerClientHandlerImpl(Socket socket){
 		this.socket = socket;
 			try{
@@ -32,6 +56,9 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 			}
 		}
 	
+	/**
+	 * @see java.lang.Runnable#run()
+	 */
 	@Override
 	public void run() {
 		try {
@@ -47,6 +74,9 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 		}
 	}
 
+	/**
+	 * @see udp.ServerClientHandler#sendUniqueId()
+	 */
 	@Override
 	public void sendUniqueId() throws IOException, InterruptedException {
 		fromClient = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -63,6 +93,9 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 		}
 	}
 	
+	/**
+	 * @see udp.ServerClientHandler#notifyClientIfFirst()
+	 */
 	@Override
 	public void notifyClientIfFirst() throws IOException {
 		String inText = fromClient.readLine();
@@ -80,6 +113,9 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 		
 	}
 
+	/**
+	 * @see udp.ServerClientHandler#tellClientToConnectOnUDP()
+	 */
 	@Override
 	public void tellClientToConnectOnUDP() throws IOException {
 		String instruction = "CONNECT OVER UDP.";
@@ -87,6 +123,9 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
 		toClient.flush();
 	}
 	
+	/**
+	 * @see udp.ServerClientHandler#listenForUDP()
+	 */
 	@Override
 	public void listenForUDP() throws SocketException, IOException{
 			byte[] receiveData = new byte[1000000];
