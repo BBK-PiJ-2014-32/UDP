@@ -9,6 +9,8 @@ public class ServerImpl implements Server {
 	private ServerSocket newServerSocket;
 	private Socket newSocket;
 	private int port;
+	private int threadCount = 0;
+	private boolean running = true;
 	
 
 	public ServerImpl(int port){
@@ -21,12 +23,17 @@ public class ServerImpl implements Server {
 			newServerSocket = new ServerSocket(port);
 			newSocket = null;
 			
-			while(true){
+			while(running){
 				System.out.println("SERVER LISTENING FOR CLIENTS");
 				newSocket = newServerSocket.accept();
 				System.out.println("CLIENT CONNECTED");
 				Thread thread = new Thread(new ServerClientHandlerImpl(newSocket));
 		        thread.start();
+		        threadCount++;
+		        if(threadCount == 10){
+		        	running = false;
+		        }
+		        closeServer();
 			}
 			
 		} catch (IOException ex){
@@ -45,6 +52,7 @@ public class ServerImpl implements Server {
 	public void closeServer() {
 		try {
 			newSocket.close();
+			System.out.println("SERVER CLOSED");
 		} catch (IOException ex){
 			ex.printStackTrace();
 		}

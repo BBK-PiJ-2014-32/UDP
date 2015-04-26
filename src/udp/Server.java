@@ -13,4 +13,6 @@ public interface Server {
  */
 void listenForClients();
 
+void closeServer();
+
 }
