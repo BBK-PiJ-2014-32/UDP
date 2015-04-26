@@ -1,17 +1,12 @@
 package launcher;
 
-import java.io.IOException;
 import java.util.Scanner;
 
 import udp.*;
 
 public class LauncherImpl implements Launcher{
 	
-	private static final String[] args = {};
 	private Scanner scan;
-	private boolean running;
-	private int count = 0;
-	private static ServerImpl server;
 
 	public static void main(String[] args){
 		
@@ -21,67 +16,37 @@ public class LauncherImpl implements Launcher{
 	}
 
 	public void run(){
-		System.out.println("*******************************************************");
-		System.out.println("* Welcome to my TCP/UDP file transfer program.        *");
-		System.out.println("* The program starts a server and then you can create *");
-		System.out.println("* create some clients, the first client will send     *");
-		System.out.println("* some audio to the server, once the server has this  *");
-		System.out.println("* it will relay it back to any subsequent clients     *"); 
-		System.out.println("* that join. These clients will then play the audio   *"); 
-		System.out.println("* received. A maximum of 10 clients can join.         *");
-		System.out.println("* There are 3 options to choose from:                 *");
-		System.out.println("* Press '1' to start the server.                      *");
-		System.out.println("* Press '2' to create a client.                       *");
-		System.out.println("* Press '9' to close.                                 *");
-		System.out.println("*******************************************************");
+		System.out.println("********************************************************");
+		System.out.println("* Welcome to my TCP/UDP file transfer program.         *");
+		System.out.println("* The program starts a server and then you can create  *");
+		System.out.println("* create some clients, the first client will send      *");
+		System.out.println("* some audio to the server, once the server has this   *");
+		System.out.println("* it will relay it back to any subsequent clients      *"); 
+		System.out.println("* that join. These clients will then play the audio    *"); 
+		System.out.println("* received. The launcher will create and run 10 clients*");
+		System.out.println("* and once then close once all audio has been recevied *");
+		System.out.println("********************************************************");
 		scan = new Scanner(System.in);
-		System.out.println("Please choose an option: ");
+		System.out.println("* Type 'Yes' to begin: ");	
 		String str = scan.nextLine();
-		switch (str) {
-			case "1":
-				startServer();
-			case "2":
+			if (str.equals("Yes")){
 				createClient();
-				count++;
-			case "9":
-				closeServer();
-			default:
-				System.out.println("Invalid choice.");
-		
-		/*while(running){
-		
-			if(str.equals("1")){
-				startServer();
-			} else if (str.equals("2")){
-				createClient();
-				count++;
-				
-			} else if (str.equals("9")|| count == 10){
-				running = false;
 			} else {
 				System.out.println("Invalid choice.");
-			}*/
-		}
+			}
 		
 	}
-	
-	@SuppressWarnings("static-access")
-	public void startServer(){
+		
+	public void createClient(){
 		try {
-			server = new ServerImpl(2000);
-			server.main(args);
-			System.out.println("Server started.");
-		} catch (IOException ex) {
+			for(int i = 0; i < 10; i++){
+				ClientImpl client = new ClientImpl("localHost", 2000);
+				client.run();
+				Thread.sleep(2000);
+			}
+		} catch (InterruptedException ex) {
 			ex.printStackTrace();
 		}
 	}
-	
-	public void createClient(){
-		ClientImpl client = new ClientImpl("localHost", 2000);
-		client.run();
-	}
-	
-	public void closeServer(){
-		server.closeServer();
-	}
+
 }
