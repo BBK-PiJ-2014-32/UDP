@@ -115,7 +115,7 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
             		dataSocket.receive(receivePacket);
             		int packetSize = receivePacket.getLength();
             		audioData = new byte [packetSize];
-            		System.out.println("RECEIVED: " + packetSize);
+            		System.out.println("RECEIVED: " + packetSize + "bytes");
             		System.arraycopy(receivePacket.getData(), 0, audioData, 0, packetSize);
             		dataSocket.close();
             	} else if (clientProcess.equals("receiver")){
@@ -124,11 +124,10 @@ public class ServerClientHandlerImpl implements ServerClientHandler, Runnable {
         			dataSocket.receive(receivePacket);
         			String toPrint = new String(receivePacket.getData());
         			System.out.println("RECEIVED = " + toPrint); 
-        		    System.out.println("Size = " + audioData.length);
         		    System.out.println("SENDING PACKET: ");
         		    DatagramPacket packetToSend = new DatagramPacket(audioData, audioData.length, receivePacket.getAddress(), receivePacket.getPort());
         		    dataSocket.send(packetToSend);
-        		    System.out.println("SENDING PACKET: " + audioData.length);
+        		    System.out.println(audioData.length + "bytes sent");
         		    dataSocket.close();
             	}
             }		
