@@ -41,4 +41,14 @@ public class ServerImpl implements Server {
 	    newServer.listenForClients();
 	}
 
+	@Override
+	public void closeServer() {
+		try {
+			newSocket.close();
+		} catch (IOException ex){
+			ex.printStackTrace();
+		}
+		
+	}
+
 }
